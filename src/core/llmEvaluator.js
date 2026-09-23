@@ -63,11 +63,11 @@ Return ONLY valid JSON with this exact schema:
 
   try {
     const response = await ai.models.generateContent({
-      model: 'gemini-1.5-flash',
+      model: 'gemini-3.5-flash-lite',
       contents: prompt,
       config: {
         responseMimeType: 'application/json',
-        temperature: 0.3, // Low temperature for consistent, factual scoring
+         // Low temperature for consistent, factual scoring
       },
     });
 
