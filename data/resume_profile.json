@@ -1,18 +1,55 @@
 {
-  "name": "Ansh Somani",
-  "education": "B.Tech Computer Science, IIIT Kota (2023-2027)",
+  "name": "Prasoon Rao",
+  "education": "B.Tech Computer Science & Engineering, NMAM Institute of Technology, Nitte (2024-2028), CGPA 8.45/10",
   "coreStack": [
-    "Node.js", "Express.js", "JavaScript (ES6+)", "MongoDB", "React.js",
-    "REST APIs", "Git", "GitHub Actions", "Cheerio", "Axios"
+    "Java",
+    "Python",
+    "JavaScript",
+    "TypeScript",
+    "SQL",
+    "React.js",
+    "Next.js",
+    "Node.js",
+    "Spring Boot",
+    "FastAPI",
+    "REST APIs",
+    "MongoDB",
+    "PostgreSQL",
+    "Prisma",
+    "Scikit-learn",
+    "TensorFlow",
+    "PyTorch",
+    "Pandas",
+    "NumPy",
+    "Matplotlib",
+    "Git",
+    "GitHub"
   ],
   "interests": [
-    "Backend Engineering", "System Design", "Distributed Systems",
-    "Data Pipelines", "Serverless Architecture"
+    "Backend Engineering",
+    "Full Stack Development",
+    "Machine Learning",
+    "Deep Learning",
+    "Artificial Intelligence",
+    "Data Science"
   ],
   "targetRoles": [
-    "Backend Engineer Intern", "SDE Intern", "Software Developer Intern",
-    "Software Engineer Intern", "Full Stack Developer Intern"
+    "SDE Intern",
+    "Software Engineer Intern",
+    "Backend Engineer Intern",
+    "Java Developer Intern",
+    "Spring Boot Intern",
+    "Full Stack Developer Intern",
+    "Software Developer Intern",
+    "Python Developer Intern",
+    "Machine Learning Intern",
+    "AI/ML Intern",
+    "Data Science Intern"
   ],
-  "targetLocations": ["India", "Remote", "Work From Home"],
+  "targetLocations": [
+    "India",
+    "Remote",
+    "Work From Home"
+  ],
   "experienceLevel": "Fresher / 0-1 years / New Grad / Entry Level"
 }
