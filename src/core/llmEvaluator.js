@@ -95,45 +95,76 @@ Return ONLY valid JSON with this exact schema:
  */
 async function evaluateJobs(jobs) {
   const apiKey = process.env.GEMINI_API_KEY;
+
   if (!apiKey) {
     console.warn('[LLM] GEMINI_API_KEY not set — skipping LLM evaluation.');
     return jobs;
   }
 
   const ai = new GoogleGenAI({ apiKey });
+
+  // IMPORTANT:
+  // Do NOT send hundreds of jobs to Gemini in one GitHub Actions run.
+  // Telegram only needs the best jobs, so evaluate a limited shortlist.
+  const MAX_LLM_JOBS = 50;
+
+  const jobsToEvaluate = jobs.slice(0, MAX_LLM_JOBS);
+  const remainingJobs = jobs.slice(MAX_LLM_JOBS);
+
+  console.log(
+    `[LLM] Evaluating ${jobsToEvaluate.length}/${jobs.length} jobs against candidate profile...`
+  );
+
   const evaluated = [];
-  const total = jobs.length;
 
-  console.log(`[LLM] Evaluating ${total} jobs against candidate profile...`);
+  for (let i = 0; i < jobsToEvaluate.length; i++) {
+    const job = jobsToEvaluate[i];
 
-  for (let i = 0; i < total; i++) {
-    const job = jobs[i];
-    console.log(`[LLM]  ${i + 1}/${total}: "${job.title}" @ ${job.company}`);
+    console.log(
+      `[LLM] ${i + 1}/${jobsToEvaluate.length}: "${job.title}" @ ${job.company}`
+    );
 
     const result = await evaluateSingleJob(ai, job);
     evaluated.push(result);
 
     if (result.matchScore != null) {
-      console.log(`[LLM]    → Score: ${result.matchScore}% | ${result.aiReason || ''}`);
+      console.log(
+        `[LLM]    → Score: ${result.matchScore}% | ${result.aiReason || ''}`
+      );
     }
 
-    // Rate-limit safety: 500ms between calls = max 120 RPM, well under 15 RPM limit
-    // (sequential processing means actual RPM is ~2-3 RPM with LLM response latency)
-    if (i < total - 1) {
-      await sleep(500);
+    // Small delay between requests.
+    // Actual request time also contributes to the spacing.
+    if (i < jobsToEvaluate.length - 1) {
+      await sleep(4000);
     }
   }
+
+  // Jobs not evaluated by Gemini are still returned unchanged.
+  const finalJobs = [...evaluated, ...remainingJobs];
 
   const scored = evaluated.filter(j => j.matchScore != null);
-  console.log(`[LLM] ✅ Scored ${scored.length}/${total} jobs.`);
+
+  console.log(
+    `[LLM] ✅ Scored ${scored.length}/${jobsToEvaluate.length} evaluated jobs.`
+  );
 
   if (scored.length > 0) {
-    const avg = Math.round(scored.reduce((sum, j) => sum + j.matchScore, 0) / scored.length);
+    const avg = Math.round(
+      scored.reduce((sum, j) => sum + j.matchScore, 0) / scored.length
+    );
+
     const high = scored.filter(j => j.matchScore >= 80).length;
-    console.log(`[LLM]    Average score: ${avg}% | High matches (≥80%): ${high}`);
+
+    console.log(
+      `[LLM] Average score: ${avg}% | High matches (≥80%): ${high}`
+    );
   }
 
-  return evaluated;
-}
+  console.log(
+    `[LLM] ⏭️ Skipped LLM evaluation for ${remainingJobs.length} additional jobs.`
+  );
 
+  return finalJobs;
+}
 module.exports = { evaluateJobs };
