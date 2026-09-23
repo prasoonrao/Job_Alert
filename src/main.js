@@ -8,12 +8,12 @@ const { passesGeoFilter, isIndia } = require('./core/geoFilter');
 const { evaluateJobs } = require('./core/llmEvaluator');
 const Database = require('./core/database');
 const TelegramNotifier = require('./notifiers/telegram');
-const DiscordNotifier = require('./notifiers/discord');
+
 
 // ─── Config ────────────────────────────────────────────────────────────────
 const TELEGRAM_TOKEN = process.env.TELEGRAM_BOT_TOKEN;
 const TELEGRAM_CHAT_ID = process.env.TELEGRAM_CHAT_ID;
-const DISCORD_WEBHOOK = process.env.DISCORD_WEBHOOK_URL;
+
 const USE_SERPAPI = process.env.USE_SERPAPI === 'true';
 const DRY_RUN = process.env.DRY_RUN === 'true' || process.argv.includes('--dry-run');
 const USE_LLM = process.env.USE_LLM === 'true';
@@ -37,7 +37,7 @@ function validateConfig() {
   const missing = [];
   if (!TELEGRAM_TOKEN) missing.push('TELEGRAM_BOT_TOKEN');
   if (!TELEGRAM_CHAT_ID) missing.push('TELEGRAM_CHAT_ID');
-  if (!DISCORD_WEBHOOK) missing.push('DISCORD_WEBHOOK_URL');
+  
   if (missing.length > 0) {
     console.error('❌ Missing required environment variables:', missing.join(', '));
     console.error('   Copy .env.example to .env and fill in your values.');
@@ -150,11 +150,11 @@ async function main() {
 
   if (!DRY_RUN) {
     const telegram = new TelegramNotifier(TELEGRAM_TOKEN, TELEGRAM_CHAT_ID);
-    const discord = new DiscordNotifier(DISCORD_WEBHOOK);
+   
 
     const results = await Promise.allSettled([
       telegram.sendJobs(toNotify, runType),
-      discord.sendJobs(toNotify, runType),
+     
     ]);
 
     // FIX Issue 7: Only mark jobs as seen if at least one notifier succeeded.
