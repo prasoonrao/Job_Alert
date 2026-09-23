@@ -56,7 +56,7 @@ jobs:
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
           SERPAPI_KEY: ${{ secrets.SERPAPI_KEY }}
-          DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
+          
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
           USE_SERPAPI: 'true'
           USE_LLM: 'true'
